@@ -1,4 +1,3 @@
-// src/services/PostService.ts
 import { Repository } from 'typeorm';
 import { Post } from '../models/post';
 import { User } from '../models/user';
@@ -8,10 +7,10 @@ import { HttpError } from '../errors/HttpError';
 import AppDataSource from '../data-source';
 
 interface PostPayload {
-  userId: string;
+  userId: number;
   content: string;
   imageUrl: string;
-  categoryId: string;
+  categoryId: number;
 }
 
 export class PostService {
@@ -21,7 +20,7 @@ export class PostService {
     this.postRepository = AppDataSource.getRepository(Post);
   }
 
-  static async getPostById(id: string): Promise<Post | null> {
+  static async getPostById(id: number): Promise<Post | null> {
     const postRepository = AppDataSource.getRepository(Post);
     const post = await postRepository.findOne({
       where: { id },
@@ -56,7 +55,7 @@ export class PostService {
     return post;
   }
 
-  public async updatePost(postId: string, content: string, imageUrl: string): Promise<Post | null> {
+  public async updatePost(postId: number, content: string, imageUrl: string): Promise<Post | null> {
     const post = await this.postRepository.findOne({ where: { id: postId } });
 
     if (!post) {
@@ -70,7 +69,7 @@ export class PostService {
     return post;
   }
 
-  public async deletePost(postId: string): Promise<void> {
+  public async deletePost(postId: number): Promise<void> {
     const post = await this.postRepository.findOne({ where: { id: postId } });
 
     if (!post) {
@@ -87,7 +86,7 @@ export class PostService {
     return posts;
   }
 
-  public async upvotePost(postId: string): Promise<Post | null> {
+  public async upvotePost(postId: number): Promise<Post | null> {
     const post = await this.postRepository.findOne({ where: { id: postId } });
 
     if (!post) {
@@ -100,7 +99,7 @@ export class PostService {
     return post;
   }
 
-  public async downvotePost(postId: string): Promise<Post | null> {
+  public async downvotePost(postId: number): Promise<Post | null> {
     const post = await this.postRepository.findOne({ where: { id: postId } });
 
     if (!post) {
@@ -113,7 +112,7 @@ export class PostService {
     return post;
   }
 
-  public async addComment(postId: string, userId: string, content: string): Promise<Comment> {
+  public async addComment(postId: number, userId: number, content: string): Promise<Comment> {
     const userRepository = AppDataSource.getRepository(User);
     const commentRepository = AppDataSource.getRepository(Comment);
 
@@ -138,9 +137,9 @@ export class PostService {
     return comment;
   }
 
-  public async getCommentsForPost(postId: string): Promise<Comment[]> {
+  public async getCommentsForPost(postId: number): Promise<Comment[]> {
     const commentRepository = AppDataSource.getRepository(Comment);
-    const comments = await commentRepository.find({ where: { post: { id: postId } } });
+    const comments = await commentRepository.find({ where: { post: { id: postId } }, relations: ["user", "post"] });
     return comments;
   }
 
@@ -149,12 +148,12 @@ export class PostService {
     return posts;
   }
 
-  public async filterPostsByCategory(categoryId: string): Promise<Post[]> {
+  public async filterPostsByCategory(categoryId: number): Promise<Post[]> {
     const posts = await this.postRepository.find({ where: { category: { id: categoryId } } });
     return posts;
   }
 
-  public async filterPostsByUser(userId: string): Promise<Post[]> {
+  public async filterPostsByUser(userId: number): Promise<Post[]> {
     const posts = await this.postRepository.find({ where: { user: { id: userId } } });
     return posts;
   }

@@ -8,7 +8,7 @@ import { IsEmail } from "class-validator";
 
 export class User extends ExtendedBaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  id!: string;
+  id!: number;
 
   @Column()
   name!: string;

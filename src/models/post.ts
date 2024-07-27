@@ -10,9 +10,9 @@ export class Post {
 
   @Column()
   content!: string;
-
-  @Column()
-  image!: string;
+  
+  @Column({ nullable: true })
+  imageUrl?: string;
 
   @ManyToOne(() => User, user => user.posts)
   user!: User;
