@@ -1,36 +1,40 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Post } from './post';
 import { Comment } from './comment';
+import ExtendedBaseEntity from './ExtendedBaseEntity';
+import { IsEmail } from "class-validator";
 
 @Entity()
-export class User {
+
+export class User extends ExtendedBaseEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({ unique: true })
-  email: string;
+  email!: string;
+
 
   @Column()
-  password: string;
+  password!: string;
 
   @Column()
-  otp: number;
+  otp!: number;
 
   @Column()
-  otp_expires_at: Date;
+  otp_expires_at!: Date;
 
   @OneToMany(() => Post, post => post.user)
-  posts: Post[];
+  posts!: Post[];
 
   @OneToMany(() => Comment, comment => comment.user)
-  comments: Comment[];
+  comments!: Comment[];
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }
