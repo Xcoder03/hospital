@@ -23,6 +23,12 @@ export class Post {
   @ManyToOne(() => Category, category => category.posts)
   category!: Category;
 
+  @Column({ default: 0 })
+  upvotes!: number;
+
+  @Column({ default: 0 })
+  downvotes!: number;
+
   @CreateDateColumn()
   createdAt!: Date;
 

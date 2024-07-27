@@ -1,10 +1,11 @@
 // src/services/PostService.ts
-import { getRepository, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Post } from '../models/post';
 import { User } from '../models/user';
 import { Category } from '../models/category';
 import { Comment } from '../models/comment';
 import { HttpError } from '../errors/HttpError';
+import AppDataSource from '../data-source';
 
 interface PostPayload {
   userId: string;
@@ -21,8 +22,8 @@ export class PostService {
   }
 
   static async getPostById(id: string): Promise<Post | null> {
-    const postRepository = getRepository(Post);
-    const post = postRepository.findOne({
+    const postRepository = AppDataSource.getRepository(Post);
+    const post = await postRepository.findOne({
       where: { id },
       relations: ["user", "category", "comments"],
     });
@@ -30,8 +31,8 @@ export class PostService {
   }
 
   public async createPost(payload: PostPayload): Promise<Post> {
-    const userRepository = getRepository(User);
-    const categoryRepository = getRepository(Category);
+    const userRepository = AppDataSource.getRepository(User);
+    const categoryRepository = AppDataSource.getRepository(Category);
 
     const user = await userRepository.findOne({ where: { id: payload.userId } });
     if (!user) {
@@ -113,8 +114,8 @@ export class PostService {
   }
 
   public async addComment(postId: string, userId: string, content: string): Promise<Comment> {
-    const userRepository = getRepository(User);
-    const commentRepository = getRepository(Comment);
+    const userRepository = AppDataSource.getRepository(User);
+    const commentRepository = AppDataSource.getRepository(Comment);
 
     const user = await userRepository.findOne({ where: { id: userId } });
     if (!user) {
@@ -138,7 +139,7 @@ export class PostService {
   }
 
   public async getCommentsForPost(postId: string): Promise<Comment[]> {
-    const commentRepository = getRepository(Comment);
+    const commentRepository = AppDataSource.getRepository(Comment);
     const comments = await commentRepository.find({ where: { post: { id: postId } } });
     return comments;
   }

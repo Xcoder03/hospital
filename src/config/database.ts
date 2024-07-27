@@ -13,8 +13,6 @@ const AppDataSource = new DataSource({
   synchronize: true,
   logging: false,
   entities: ['src/models/**/*.ts'],
-  migrations: ['src/migrations/**/*.ts'],
-  subscribers: ['src/subscribers/**/*.ts'],
 });
 
 export default AppDataSource;
