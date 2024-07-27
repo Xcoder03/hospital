@@ -16,6 +16,12 @@ export class User {
   @Column()
   password: string;
 
+  @Column()
+  otp: number;
+
+  @Column()
+  otp_expires_at: Date;
+
   @OneToMany(() => Post, post => post.user)
   posts: Post[];
 
