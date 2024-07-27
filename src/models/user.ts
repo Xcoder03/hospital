@@ -10,21 +10,22 @@ export class User extends ExtendedBaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: number;
 
-  @Column()
-  name!: string;
+  @Column({ unique: true })
+  username!: string;
+
 
   @Column({ unique: true })
   email!: string;
+
+  @Column({ default: false })
+  emailVerified!: boolean;
+
 
 
   @Column()
   password!: string;
 
-  @Column()
-  otp!: number;
 
-  @Column()
-  otp_expires_at!: Date;
 
   @OneToMany(() => Post, post => post.user)
   posts!: Post[];
