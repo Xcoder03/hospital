@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
-import dotenv from 'dotenv';
 
+import dotenv from 'dotenv';
 dotenv.config();
 
 const AppDataSource = new DataSource({
