@@ -10,7 +10,7 @@ class UserController {
     this.userService = new UserService();
   }
 
-  async register(req: Request, res: Response, next: NextFunction) {
+  async registerUser(req: Request, res: Response, next: NextFunction) {
     try {
       const user = await this.userService.registerUser(req.body);
       res.status(201).json(user);
@@ -23,7 +23,7 @@ class UserController {
     }
   }
 
-  async login(req: Request, res: Response, next: NextFunction) {
+  async loginUser(req: Request, res: Response, next: NextFunction) {
     try {
       const { username, password } = req.body;
       const token = await this.userService.loginUser(username, password);
