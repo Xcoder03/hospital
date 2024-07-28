@@ -25,7 +25,11 @@ export class User extends ExtendedBaseEntity {
   @Column()
   password!: string;
 
+  @Column()
+  otp!: string;
 
+  @Column()
+  otp_expires_at!: Date;
 
   @OneToMany(() => Post, post => post.user)
   posts!: Post[];

@@ -5,6 +5,7 @@ import { HttpError } from '../errors/HttpError';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
+import { generateOTP, hashOTP } from '../utils/generateOtp';
 
 const jwtSecret = process.env.JWT_SECRET || 'your_jwt_secret';
 const otpSecret = process.env.OTP_SECRET || 'your_otp_secret';
@@ -13,6 +14,8 @@ interface UserPayload {
   username: string;
   password: string;
   email: string;
+  otp: string;
+
 }
 
 interface OTPPayload {
@@ -52,14 +55,14 @@ export class UserService {
     return token;
   }
 
-  public async getUserById(id: string): Promise<User | null> {
+  public async getUserById(id: number): Promise<User | null> {
     const user = await this.userRepository.findOne({ where: { id } });
     return user;
   }
 
   public async sendVerificationEmail(email: string): Promise<void> {
-    const otp = crypto.randomInt(100000, 999999).toString();
-    const hash = crypto.createHmac('sha256', otpSecret).update(otp).digest('hex');
+    const otp = generateOTP()
+    const hash = hashOTP(otp)
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -97,7 +100,7 @@ export class UserService {
     }
 
     user.emailVerified = true;
-    user.otp = null;
+    user.otp = "";
     await this.userRepository.save(user);
   }
 }
